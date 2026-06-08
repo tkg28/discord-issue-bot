@@ -15,7 +15,7 @@ client.once(Events.ClientReady, () => {
   console.log("Bot起動");
 });
 
-client.on(Events.InteractionCreate, async interaction => {
+client.on(Events.InteractionCreate, async (interaction) => {
   if (!interaction.isChatInputCommand()) return;
 
   if (interaction.commandName === "todo") {
@@ -26,10 +26,9 @@ client.on(Events.InteractionCreate, async interaction => {
         interaction.options.getString("title");
 
      try {
-  const issue = await createIssue(title);
-
-  await interaction.reply(
-    `Issue #${issue.number} を作成しました\n${issue.html_url}`
+        const issue = await createIssue(title);
+        await interaction.reply(
+    `Issue ${issue.number} を作成しました\n${issue.html_url}`
   );
 } catch (error) {
   console.error(error);
