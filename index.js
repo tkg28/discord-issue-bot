@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { createIssue } = require("./issueService");
 
 const {
   Client,
@@ -24,9 +25,19 @@ client.on(Events.InteractionCreate, async interaction => {
       const title =
         interaction.options.getString("title");
 
-      await interaction.reply(
-        `受け取りました: ${title}`
-      );
+     try {
+  const issue = await createIssue(title);
+
+  await interaction.reply(
+    `Issue #${issue.number} を作成しました\n${issue.html_url}`
+  );
+} catch (error) {
+  console.error(error);
+
+  await interaction.reply(
+    "Issue作成に失敗しました"
+  );
+}
     }
   }
 });
