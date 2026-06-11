@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { createIssue } = require("./issueService");
+const { createIssue, completeIssue, viewIssue } = require("./issueService");
 
 const {
   Client,
@@ -38,6 +38,38 @@ client.on(Events.InteractionCreate, async (interaction) => {
   );
 }
     }
+
+    if (sub === "complete") {
+          const title =
+            interaction.options.getString("title");
+      try {
+            const issue = await completeIssue(title);
+            await interaction.reply(
+        `Issue ${issue.number} を完了しました\n${issue.html_url}`
+      );
+    } catch (error) {
+      console.error(error);
+
+      await interaction.reply(
+        "Issue完了に失敗しました"
+      );
+    }
+        
+    }
+        if (sub === "view") {
+
+     try {
+        const issue = await viewIssue();
+        await interaction.reply(`${issue}view一覧を表示しました。`);
+  } catch (error) {
+    console.error(error);
+
+  await interaction.reply(
+    "Issue表示に失敗しました"
+  );
+}
+    }
+
   }
 });
 

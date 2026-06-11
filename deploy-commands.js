@@ -17,6 +17,22 @@ const commands = [
             .setRequired(true)
         )
     )
+    .addSubcommand(sub =>
+      sub
+        .setName("complete")
+        .setDescription("Issueを完了")
+        .addStringOption(option =>
+          option
+            .setName("title")
+            .setDescription("Issueタイトル")
+            .setRequired(true)
+        )
+    )
+    .addSubcommand(sub =>
+      sub
+        .setName("view")
+        .setDescription("Issueを表示")
+    )
 ].map(command => command.toJSON());
 
 const rest = new REST({ version: "10" })
