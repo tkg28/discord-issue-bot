@@ -59,8 +59,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
         if (sub === "view") {
 
      try {
-        const issue = await viewIssue();
-        await interaction.reply(`${issue}view一覧を表示しました。`);
+        const issues = await viewIssue();
+        if (issues.length === 0) {
+          await interaction.reply("Issueはありませんでした。");
+        } else {
+          const message = issues
+            .map(issueItem => `${issueItem.number}: ${issueItem.title}`)
+            .join("\n");
+          await interaction.reply(`未完了のIssue一覧:\n${message}`);
+        }
   } catch (error) {
     console.error(error);
 
