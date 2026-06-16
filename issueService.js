@@ -1,3 +1,4 @@
+//　コマンドの関数を定義をするファイル
 const octokit = require("./github");
 
 async function createIssue(title) {

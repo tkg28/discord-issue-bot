@@ -1,3 +1,4 @@
+//コマンドを実際に登録するファイル
 require("dotenv").config();
 
 const { REST, Routes, SlashCommandBuilder } = require("discord.js");
