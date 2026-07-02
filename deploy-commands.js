@@ -24,8 +24,8 @@ const commands = [
         .setDescription("Issueを完了")
         .addStringOption(option =>
           option
-            .setName("title")
-            .setDescription("Issueタイトル")
+            .setName("target")
+            .setDescription("IssueタイトルまたはIssue番号")
             .setRequired(true)
         )
     )
