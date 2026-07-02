@@ -1,5 +1,6 @@
 require("dotenv").config();
 const { createIssue, completeIssue, viewIssue } = require("./issueService");
+const { buildIssueListEmbed } = require("./embeds");
 
 const {
   Client,
@@ -27,9 +28,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
      try {
         const issue = await createIssue(title);
-        await interaction.reply(
-    `Issue ${issue.number} を作成しました\n${issue.html_url}`
-  );
+        const issues = await viewIssue();
+        await interaction.reply({
+          content: `Issue ${issue.number} を作成しました\n${issue.html_url}`,
+          embeds: [buildIssueListEmbed(issues)],
+        });
 } catch (error) {
   console.error(error);
 
@@ -40,13 +43,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
     }
 
     if (sub === "complete") {
-          const title =
-            interaction.options.getString("title");
+          const target =
+            interaction.options.getString("target");
       try {
-            const issue = await completeIssue(title);
-            await interaction.reply(
-        `Issue ${issue.number} を完了しました\n${issue.html_url}`
-      );
+            const issue = await completeIssue(target);
+            const issues = await viewIssue();
+            await interaction.reply({
+              content: `Issue ${issue.number} を完了しました\n${issue.html_url}`,
+              embeds: [buildIssueListEmbed(issues)],
+            });
     } catch (error) {
       console.error(error);
 
@@ -54,20 +59,15 @@ client.on(Events.InteractionCreate, async (interaction) => {
         "Issue完了に失敗しました"
       );
     }
-        
+
     }
         if (sub === "view") {
 
      try {
         const issues = await viewIssue();
-        if (issues.length === 0) {
-          await interaction.reply("Issueはありませんでした。");
-        } else {
-          const message = issues
-            .map(issueItem => `${issueItem.number}: ${issueItem.title}`)
-            .join("\n");
-          await interaction.reply(`未完了のIssue一覧:\n${message}`);
-        }
+        await interaction.reply({
+          embeds: [buildIssueListEmbed(issues)],
+        });
   } catch (error) {
     console.error(error);
 
